@@ -38,7 +38,7 @@ function Node({ variant, title, desc, tag, tagVariant, tags, tipTitle, tip, dash
 
 type LangKey = 'en' | 'de'
 
-export default function FrontendPlanning({ onBack }: { onBack: () => void }) {
+export default function FrontendPlanning() {
   const [lang, setLang] = useState<LangKey>('en')
   const [tooltip, setTooltip] = useState<TooltipState>({ visible: false, x: 0, y: 0, title: '', content: '' })
   const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -82,7 +82,6 @@ export default function FrontendPlanning({ onBack }: { onBack: () => void }) {
             <button className={lang === 'en' ? 'active' : ''} onClick={() => setLang('en')}>EN</button>
             <button className={lang === 'de' ? 'active' : ''} onClick={() => setLang('de')}>DE</button>
           </div>
-          <button className="back-btn" onClick={onBack}>← Dashboard</button>
         </div>
       </div>
 
@@ -109,12 +108,32 @@ export default function FrontendPlanning({ onBack }: { onBack: () => void }) {
         <div className="legend-item" style={{ color: 'var(--gold)', fontSize: 10 }}>▲ = Alternative</div>
       </div>
 
+      {/* Body: sidebar + content */}
+      <div className="arch-body">
+        <nav className="arch-sidebar">
+          <span className="sidebar-section-label">Layers</span>
+          <a className="sidebar-link" href="#layer-core">App Core</a>
+          <a className="sidebar-link" href="#layer-styling">Styling</a>
+          <a className="sidebar-link" href="#layer-auth">Auth</a>
+          <a className="sidebar-link" href="#layer-email">Email & SMS</a>
+          <a className="sidebar-link" href="#layer-state">State & Forms</a>
+          <a className="sidebar-link" href="#layer-bi">Analytics & BI</a>
+          <a className="sidebar-link" href="#layer-hosting">Hosting</a>
+          <a className="sidebar-link" href="#layer-testing">Testing & CI</a>
+          <span className="sidebar-section-label">Sections</span>
+          <a className="sidebar-link" href="#sec-modules">Module Rules</a>
+          <a className="sidebar-link" href="#sec-compare">Comparisons</a>
+          <a className="sidebar-link" href="#sec-devtools">Dev Tooling</a>
+          <a className="sidebar-link" href="#sec-cost">Cost Breakdown</a>
+        </nav>
+        <div className="arch-content">
+
       {/* Canvas */}
       <div className="canvas">
         <div className="layers">
 
           {/* App Core */}
-          <div className="layer">
+          <div id="layer-core" className="layer">
             <div className="layer-label label-infra">{isEn ? 'App Core' : 'App-Kern'}</div>
             {n({ variant: 'infra', title: 'React 19', desc: isEn ? 'Concurrent rendering, React Compiler (auto-memoize), Server Components support. Foundation of the entire frontend.' : 'Concurrent Rendering, React Compiler (Auto-Memoize), Server Components. Grundlage des gesamten Frontends.', tags: [{ text: isEn ? 'STABLE' : 'STABIL', variant: 'rec' }, { text: isEn ? 'RECOMMENDED' : 'EMPFOHLEN', variant: 'app' }], tipTitle: isEn ? 'Why React 19?' : 'Warum React 19?', tip: isEn ? 'React 19 brings the React Compiler which auto-memoizes components — no more manual useMemo/useCallback in 90% of cases. Concurrent features (Suspense, transitions) enable non-blocking UI updates. The largest ecosystem of any frontend framework.' : 'React 19 bringt den React Compiler, der Komponenten automatisch memoiert. Concurrent Features (Suspense, Transitions) ermöglichen nicht-blockierende UI-Updates. Das größte Ökosystem aller Frontend-Frameworks.' })}
             {n({ variant: 'infra', title: 'React Router v7', desc: isEn ? 'File-based routing, nested layouts, data loaders, server rendering ready. Replaces router + data-fetching boilerplate.' : 'Dateibasiertes Routing, verschachtelte Layouts, Data Loader, SSR-bereit. Ersetzt Router + Datenabruf-Boilerplate.', tag: isEn ? 'FILE-BASED ROUTING' : 'DATEIBASIERTES ROUTING', tagVariant: 'infra', tipTitle: isEn ? 'Why React Router v7?' : 'Warum React Router v7?', tip: isEn ? 'v7 supports nested layouts with automatic data pre-fetching via loader functions. Routes become co-located with their data requirements. Full SSR support if needed later. Flat config in react-router.config.ts.' : 'v7 unterstützt verschachtelte Layouts mit automatischem Datenpre-Fetching über Loader-Funktionen. Routen werden mit ihren Datenanforderungen zusammengelegt. Volle SSR-Unterstützung bei Bedarf.' })}
@@ -125,7 +144,7 @@ export default function FrontendPlanning({ onBack }: { onBack: () => void }) {
           <div className="section-divider" data-label={isEn ? 'style' : 'stil'} />
 
           {/* Styling */}
-          <div className="layer">
+          <div id="layer-styling" className="layer">
             <div className="layer-label label-event">{isEn ? 'Styling' : 'Styling'}</div>
             {n({ variant: 'event', title: 'Tailwind CSS v4', desc: isEn ? 'CSS-first config — no tailwind.config.js needed. 2× faster builds via Lightning CSS (Rust). @theme directive in CSS.' : 'CSS-first Konfiguration — kein tailwind.config.js benötigt. 2× schnellere Builds via Lightning CSS (Rust). @theme-Direktive in CSS.', tags: [{ text: 'v4 · CSS-FIRST', variant: 'event' }, { text: isEn ? 'NO CONFIG FILE' : 'KEINE KONFIG', variant: 'dim' }], tipTitle: isEn ? 'Tailwind v4 breaking change' : 'Tailwind v4 Breaking Change', tip: isEn ? 'v4 breaking change: configuration moves into CSS with @theme. No more tailwind.config.js. Use @import "tailwindcss" in your CSS entry. Lightning CSS engine replaces PostCSS — 2× faster. Use the tailwind-v4-shadcn skill to avoid setup errors.' : 'v4 Breaking Change: Konfiguration zieht in CSS mit @theme um. Kein tailwind.config.js mehr. Verwenden Sie @import "tailwindcss" in Ihrem CSS-Einstieg. Lightning CSS ersetzt PostCSS — 2× schneller.' })}
             {n({ variant: 'event', title: 'shadcn/ui', desc: isEn ? 'Copy-paste component library on Radix UI + Tailwind. You own the code — no black-box npm package. CLI-driven.' : 'Copy-Paste-Komponentenbibliothek auf Radix UI + Tailwind. Sie besitzen den Code — kein Black-Box-npm-Paket. CLI-gesteuert.', tag: isEn ? 'OWNED CODE · RADIX UI' : 'EIGENER CODE · RADIX UI', tagVariant: 'event', tipTitle: isEn ? 'Why shadcn/ui?' : 'Warum shadcn/ui?', tip: isEn ? 'Use the CLI: `npx shadcn@latest add button`. Components are added directly to src/components/ui/. Customize freely — it\'s your code. Built on Radix UI primitives for accessibility. Pairs perfectly with Tailwind v4.' : 'CLI verwenden: `npx shadcn@latest add button`. Komponenten werden direkt in src/components/ui/ hinzugefügt. Frei anpassbar — es ist Ihr Code. Basiert auf Radix UI-Primitiven für Barrierefreiheit.' })}
@@ -135,7 +154,7 @@ export default function FrontendPlanning({ onBack }: { onBack: () => void }) {
           <div className="section-divider" data-label={isEn ? 'auth' : 'auth'} />
 
           {/* Auth */}
-          <div className="layer">
+          <div id="layer-auth" className="layer">
             <div className="layer-label label-gdpr">{isEn ? 'Auth Options' : 'Auth-Optionen'}</div>
             {n({ variant: 'gdpr', title: isEn ? '✦ Supabase Auth' : '✦ Supabase Auth', desc: isEn ? 'Built-in with Supabase. Email/password, OAuth, magic links, MFA. RLS policies auto-apply to auth.uid() — zero extra middleware.' : 'In Supabase integriert. E-Mail/Passwort, OAuth, Magic Links, MFA. RLS-Richtlinien gelten automatisch für auth.uid() — keine extra Middleware.', tags: [{ text: isEn ? 'RECOMMENDED' : 'EMPFOHLEN', variant: 'rec' }, { text: 'BUILT-IN RLS', variant: 'gdpr' }], tipTitle: isEn ? 'Why Supabase Auth is the default?' : 'Warum Supabase Auth der Standard ist?', tip: isEn ? 'Supabase Auth integrates directly with RLS — no extra middleware needed. `auth.uid()` in Postgres policies references the logged-in user. Handles OAuth (Google, GitHub), magic links, MFA, and session refresh automatically. Zero extra setup if already using Supabase.' : 'Supabase Auth integriert sich direkt mit RLS — keine extra Middleware benötigt. auth.uid() in Postgres-Richtlinien referenziert den eingeloggten Benutzer. Verwaltet OAuth, Magic Links, MFA und Session-Refresh automatisch.' })}
             {n({ variant: 'gdpr', title: isEn ? '▲ Keycloak' : '▲ Keycloak', desc: isEn ? 'Red Hat / self-hosted identity provider. SAML, OIDC, LDAP, Active Directory, SSO federation. Required when enterprise clients need their own IdP.' : 'Red Hat / selbst-gehosteter Identity Provider. SAML, OIDC, LDAP, Active Directory, SSO-Federation. Erforderlich wenn Enterprise-Kunden ihren eigenen IdP benötigen.', tags: [{ text: 'ENTERPRISE · SSO', variant: 'alert' }, { text: 'SAML · LDAP', variant: 'dim' }], tipTitle: isEn ? 'When to choose Keycloak?' : 'Wann Keycloak wählen?', tip: isEn ? 'Choose Keycloak when: (1) enterprise clients need SSO with their own Active Directory or LDAP, (2) you need SAML assertion support, (3) you need multi-realm isolation per tenant. Use keycloak-js or oidc-client-ts. ~300MB Docker container. Self-host on Hetzner for EU data residency.' : 'Keycloak wählen wenn: (1) Enterprise-Kunden SSO mit ihrem eigenen Active Directory oder LDAP benötigen, (2) SAML-Assertion-Unterstützung nötig ist, (3) Multi-Realm-Isolation pro Mandant benötigt wird. keycloak-js oder oidc-client-ts verwenden.' })}
@@ -146,7 +165,7 @@ export default function FrontendPlanning({ onBack }: { onBack: () => void }) {
           <div className="section-divider" data-label={isEn ? 'email & sms' : 'e-mail & sms'} />
 
           {/* Messaging & Comms */}
-          <div className="layer">
+          <div id="layer-email" className="layer">
             <div className="layer-label label-bronze">{isEn ? 'Email & Messaging' : 'E-Mail & Messaging'}</div>
             {n({ variant: 'bronze', title: isEn ? '✦ Resend' : '✦ Resend', desc: isEn ? 'Modern transactional email API. Write templates as React components with react-email — hot reload in dev, no string interpolation. EU region (Frankfurt). Sub-second delivery.' : 'Modernes transaktionales E-Mail-API. Templates als React-Komponenten mit react-email — Hot Reload in der Entwicklung. EU-Region (Frankfurt). Sub-Sekunden-Zustellung.', tags: [{ text: isEn ? 'RECOMMENDED' : 'EMPFOHLEN', variant: 'rec' }, { text: 'REACT EMAIL', variant: 'app' }], tipTitle: isEn ? 'Why Resend?' : 'Warum Resend?', tip: isEn ? 'Best DX for transactional email. Templates are React components: `resend.emails.send({ from, to, subject, react: <InvoiceEmail /> })`. EU data region in Frankfurt. 100 emails/day free, then $20/mo for 50k. Pair with the react-email library for template development with live preview.' : 'Beste DX für transaktionale E-Mails. Templates sind React-Komponenten: resend.emails.send({ from, to, react: <InvoiceEmail /> }). EU-Datenregion in Frankfurt. 100 E-Mails/Tag kostenlos, dann $20/Monat für 50k.' })}
             {n({ variant: 'bronze', title: isEn ? '▲ Postmark' : '▲ Postmark', desc: isEn ? 'High-deliverability transactional email (~99.99% inbox rate). Separate streams for transactional vs bulk — protects sender reputation. GDPR-compliant EU servers. Best for invoices, password resets.' : 'Hohe Zustellbarkeit (~99.99% Posteingangsrate). Getrennte Streams für transaktional vs. Bulk — schützt Absender-Reputation. DSGVO-konforme EU-Server. Ideal für Rechnungen, Passwort-Resets.', tags: [{ text: 'HIGH DELIVERABILITY', variant: 'quality' }, { text: 'GDPR · EU', variant: 'gdpr' }], tipTitle: isEn ? 'Postmark vs Resend' : 'Postmark vs Resend', tip: isEn ? 'Choose Postmark when deliverability is critical (healthcare, finance). Postmark\'s message streams separate transactional from marketing to protect IP reputation. EU-based sending. Free: 100/mo. Paid: from $15/mo for 10k. Handlebars templates (not React). More mature than Resend for compliance-heavy industries.' : 'Postmark wählen wenn Zustellbarkeit kritisch ist (Gesundheit, Finanzen). Postmarks Nachrichtenstreams trennen transaktional von Marketing um IP-Reputation zu schützen. EU-basiertes Senden.' })}
@@ -157,7 +176,7 @@ export default function FrontendPlanning({ onBack }: { onBack: () => void }) {
           <div className="section-divider" data-label={isEn ? 'state' : 'zustand'} />
 
           {/* State + Forms */}
-          <div className="layer">
+          <div id="layer-state" className="layer">
             <div className="layer-label label-gold">{isEn ? 'State & Forms' : 'Zustand & Formulare'}</div>
             {n({ variant: 'gold', title: 'TanStack Query v5', desc: isEn ? 'Server state: caching, background refetch, optimistic updates, pagination. Replaces all raw useEffect fetching. All Supabase calls go through queryFn.' : 'Server-Zustand: Caching, Hintergrund-Refetch, optimistische Updates, Paginierung. Ersetzt alle rohen useEffect-Abrufe. Alle Supabase-Aufrufe gehen durch queryFn.', tags: [{ text: 'SERVER STATE', variant: 'gold' }, { text: 'v5 API', variant: 'dim' }], tipTitle: isEn ? 'TanStack Query v5 gotchas' : 'TanStack Query v5 Fallstricke', tip: isEn ? 'v5 API change: useMutation returns `mutateAsync` (not `mutate`) for awaitable calls. Always put Supabase queries in queryFn, never in components. Use queryClient.invalidateQueries() after mutations. Default stale time: 0 — set to 60s for stable data.' : 'v5 API-Änderung: useMutation gibt `mutateAsync` (nicht `mutate`) für awaitable Aufrufe zurück. Supabase-Abfragen immer in queryFn, niemals in Komponenten. queryClient.invalidateQueries() nach Mutationen verwenden.' })}
             {n({ variant: 'gold', title: 'Zustand', desc: isEn ? 'Client-only global state: sidebar open/closed, theme, user preferences, temp UI selections. Never for server data — that\'s TanStack Query.' : 'Client-only globaler Zustand: Sidebar offen/geschlossen, Theme, Benutzereinstellungen, temporäre UI-Auswahlen. Niemals für Server-Daten — das ist TanStack Query.', tag: isEn ? 'CLIENT STATE ONLY' : 'NUR CLIENT-ZUSTAND', tagVariant: 'gold', tipTitle: isEn ? 'Zustand vs TanStack Query' : 'Zustand vs TanStack Query', tip: isEn ? 'Rule: if it comes from a server → TanStack Query. If it\'s UI-only (sidebar, theme, temp selections) → Zustand. Avoid mixing the two. With devtools middleware, all Zustand stores are visible in Redux DevTools. With persist middleware, state survives page reloads.' : 'Regel: Wenn es vom Server kommt → TanStack Query. Wenn es UI-only ist (Sidebar, Theme, temporäre Auswahlen) → Zustand. Die beiden nie mischen.' })}
@@ -168,7 +187,7 @@ export default function FrontendPlanning({ onBack }: { onBack: () => void }) {
           <div className="section-divider" data-label={isEn ? 'bi' : 'bi'} />
 
           {/* Analytics & BI */}
-          <div className="layer">
+          <div id="layer-bi" className="layer">
             <div className="layer-label label-quality">{isEn ? 'Analytics & BI' : 'Analytik & BI'}</div>
             {n({ variant: 'quality', title: isEn ? '✦ PostHog (Self-Hosted)' : '✦ PostHog (Selbst-Gehostet)', desc: isEn ? 'Product analytics on Hetzner AX52 #3. ClickHouse + Kafka internally. Feature flags, session replay, funnels, A/B testing. All EU data.' : 'Produktanalytik auf Hetzner AX52 #3. Intern ClickHouse + Kafka. Feature Flags, Session Replay, Funnels, A/B-Testing. Alle EU-Daten.', tags: [{ text: isEn ? 'PRIMARY' : 'PRIMÄR', variant: 'rec' }, { text: 'SELF-HOSTED · GDPR', variant: 'gdpr' }], tipTitle: isEn ? 'Why PostHog self-hosted?' : 'Warum PostHog selbst hosten?', tip: isEn ? 'Self-hosting PostHog on AX52 #3 keeps all user behavior data in Germany. Supports feature flags for staged rollouts and A/B testing. Use the posthog-js React provider. Session replay for UX debugging. Event tracking with tenant_id ensures per-tenant analytics.' : 'Selbst-Hosting von PostHog auf AX52 #3 hält alle Nutzerverhaltensdaten in Deutschland. Unterstützt Feature Flags für Staged Rollouts und A/B-Testing. posthog-js React-Provider verwenden.' })}
             {n({ variant: 'quality', title: isEn ? '▲ Metabase Pro' : '▲ Metabase Pro', desc: isEn ? 'SQL-based BI with embeddable dashboards. Pro enables tenant-scoped embedding via signed JWT. Connects to Gold Postgres layer. Self-host or cloud.' : 'SQL-basiertes BI mit einbettbaren Dashboards. Pro ermöglicht Mandanten-scoped Einbettung via signiertem JWT. Verbindet sich mit Gold Postgres-Schicht. Selbst-Host oder Cloud.', tags: [{ text: 'BI DASHBOARDS', variant: 'quality' }, { text: 'EMBED · JWT', variant: 'gold' }], tipTitle: isEn ? 'Metabase Pro embedding' : 'Metabase Pro Einbettung', tip: isEn ? 'Metabase Pro embedding: generate a signed JWT with tenant_id → renders a tenant-scoped dashboard inside tennent_bi_application. Connects directly to gold_bi_tennent Postgres schema. ~$500/mo for Pro tier. Self-host on Hetzner to reduce costs. Best for non-technical tenant users who need ready-made dashboards.' : 'Metabase Pro Einbettung: signiertes JWT mit tenant_id generieren → rendert mandantenspezifisches Dashboard in tennent_bi_application. Verbindet sich direkt mit gold_bi_tennent Postgres-Schema. ~$500/Monat für Pro.' })}
@@ -179,7 +198,7 @@ export default function FrontendPlanning({ onBack }: { onBack: () => void }) {
           <div className="section-divider" data-label={isEn ? 'infra' : 'infra'} />
 
           {/* Hosting & Billing & Scheduling */}
-          <div className="layer">
+          <div id="layer-hosting" className="layer">
             <div className="layer-label label-app">{isEn ? 'Hosting & Services' : 'Hosting & Dienste'}</div>
             {n({ variant: 'app', title: isEn ? '✦ Cloudflare Pages' : '✦ Cloudflare Pages', desc: isEn ? 'Global CDN deployment for frontend. Free tier: unlimited projects, 500 builds/mo. PR previews automatic. Edge Functions via Workers.' : 'Globale CDN-Bereitstellung für Frontend. Kostenlos: unbegrenzte Projekte, 500 Builds/Monat. PR-Vorschauen automatisch. Edge Functions via Workers.', tags: [{ text: 'CDN · FREE', variant: 'rec' }, { text: 'CLOUDFLARE WORKERS', variant: 'infra' }], tipTitle: isEn ? 'Why Cloudflare Pages?' : 'Warum Cloudflare Pages?', tip: isEn ? 'Deploy with: `npx wrangler pages deploy dist`. PR previews are automatic. Edge cache is global — first byte in <50ms worldwide. wrangler.toml is the config file. Cloudflare Workers for edge functions (rate limiting, auth middleware). Free tier is very generous.' : 'Bereitstellen mit: `npx wrangler pages deploy dist`. PR-Vorschauen automatisch. Edge-Cache global — erster Byte in <50ms weltweit. wrangler.toml ist die Konfigurationsdatei.' })}
             {n({ variant: 'infra', title: isEn ? '▲ Hetzner + Nginx/Caddy' : '▲ Hetzner + Nginx/Caddy', desc: isEn ? 'Self-hosted frontend on Hetzner. Full EU control. Caddy for automatic SSL. Shared with other workloads on existing AX52.' : 'Selbst-gehostetes Frontend auf Hetzner. Volle EU-Kontrolle. Caddy für automatisches SSL. Geteilt mit anderen Workloads auf vorhandenem AX52.', tags: [{ text: isEn ? 'EU SELF-HOSTED' : 'EU SELBST-GEHOSTET', variant: 'gdpr' }, { text: isEn ? 'ALT' : 'ALT', variant: 'alt' }], tipTitle: isEn ? 'When to use Hetzner self-host?' : 'Wann Hetzner selbst hosten?', tip: isEn ? 'If Cloudflare Pages doesn\'t meet data residency requirements or you need full control. Deploy to existing AX52, serve via Nginx/Caddy (Caddy handles SSL automatically). No CDN, but all data stays in EU. Cost: ~€0 extra (shared with existing servers).' : 'Wenn Cloudflare Pages Datenanforderungen nicht erfüllt oder volle Kontrolle benötigt wird. Auf vorhandenem AX52 bereitstellen, via Nginx/Caddy servieren (Caddy verwaltet SSL automatisch). Kein CDN, aber alle Daten bleiben in der EU.' })}
@@ -194,7 +213,7 @@ export default function FrontendPlanning({ onBack }: { onBack: () => void }) {
           <div className="section-divider" data-label={isEn ? 'test' : 'test'} />
 
           {/* Testing & CI */}
-          <div className="layer">
+          <div id="layer-testing" className="layer">
             <div className="layer-label label-alert">{isEn ? 'Testing & CI' : 'Tests & CI'}</div>
             {n({ variant: 'alert', title: isEn ? 'Vitest + RTL' : 'Vitest + RTL', desc: isEn ? 'Vitest for unit + integration tests (Jest-compatible, faster). React Testing Library for component tests. Co-located in module __tests__/unit/ and __tests__/integration/.' : 'Vitest für Unit- + Integrationstests (Jest-kompatibel, schneller). React Testing Library für KomponentenTests. Co-lokalisiert in module __tests__/unit/ und __tests__/integration/.', tag: isEn ? 'UNIT · INTEGRATION' : 'UNIT · INTEGRATION', tagVariant: 'alert', tipTitle: isEn ? 'Vitest setup' : 'Vitest Setup', tip: isEn ? 'Vitest is Jest-compatible but runs on Vite — 10x faster cold start. Configure in vitest.config.ts. Use `renderWithProviders()` helper from src/test/helpers/ to wrap components with QueryClient, Supabase, and other providers. Co-locate tests with modules, not in a separate test/ folder.' : 'Vitest ist Jest-kompatibel läuft aber auf Vite — 10x schnellerer Kaltstart. In vitest.config.ts konfigurieren. `renderWithProviders()` Helper aus src/test/helpers/ verwenden.' })}
             {n({ variant: 'alert', title: 'Playwright', desc: isEn ? 'E2E tests in e2e/ at project root. Covers full user flows: signup → dashboard → feature. Runs after unit tests pass in CI.' : 'E2E-Tests in e2e/ im Projektstamm. Deckt vollständige Benutzerflüsse ab: Registrierung → Dashboard → Feature. Läuft nach Unit-Tests in CI.', tag: 'E2E · BROWSER', tagVariant: 'alert', tipTitle: isEn ? 'Playwright test strategy' : 'Playwright Teststrategie', tip: isEn ? 'E2E tests live in e2e/ at project root (not in modules). Each epic needs at least 1 E2E test for the happy path. Run with `npx playwright test`. In CI, E2E runs only after unit + integration tests pass (dependency in ci.yml). Use `playwright.config.ts` for base URL and browser config.' : 'E2E-Tests leben in e2e/ im Projektstamm (nicht in Modulen). Jedes Epic benötigt mindestens 1 E2E-Test für den Happy Path. Mit `npx playwright test` ausführen.' })}
@@ -205,7 +224,7 @@ export default function FrontendPlanning({ onBack }: { onBack: () => void }) {
       </div>
 
       {/* Module Architecture Rules */}
-      <div className="section">
+      <div id="sec-modules" className="section">
         <div className="section-header">
           <div className="section-title">{isEn ? 'Module Architecture Rules' : 'Modul-Architektur-Regeln'}</div>
           <div className="section-subtitle">{isEn ? 'from SAAS-FRAMEWORK.md' : 'aus SAAS-FRAMEWORK.md'}</div>
@@ -219,7 +238,7 @@ export default function FrontendPlanning({ onBack }: { onBack: () => void }) {
       </div>
 
       {/* Auth & BI Cost Comparison */}
-      <div className="section" style={{ background: 'var(--bg)' }}>
+      <div id="sec-compare" className="section" style={{ background: 'var(--bg)' }}>
         <div className="section-header">
           <div className="section-title">{isEn ? 'Tool Comparison Tables' : 'Werkzeug-Vergleichstabellen'}</div>
         </div>
@@ -330,7 +349,7 @@ export default function FrontendPlanning({ onBack }: { onBack: () => void }) {
       </div>
 
       {/* Dev Tooling */}
-      <div className="section">
+      <div id="sec-devtools" className="section">
         <div className="section-header">
           <div className="section-title">{isEn ? 'Developer Tooling & Conventions' : 'Entwickler-Tools & Konventionen'}</div>
         </div>
@@ -341,6 +360,116 @@ export default function FrontendPlanning({ onBack }: { onBack: () => void }) {
           {n({ variant: 'gdpr', title: isEn ? 'Sentry (Error Monitoring)' : 'Sentry (Fehlerüberwachung)', desc: isEn ? 'Frontend + backend error tracking. Session replay on errors. PII scrubbing before sending. Source maps for readable stack traces in prod.' : 'Frontend + Backend-Fehlerverfolgung. Session Replay bei Fehlern. PII-Bereinigung vor dem Senden. Source Maps für lesbare Stack Traces in Prod.', tag: isEn ? 'ERROR TRACKING · GDPR' : 'FEHLERVERFOLGUNG · DSGVO', tagVariant: 'gdpr', tipTitle: isEn ? 'Sentry GDPR configuration' : 'Sentry DSGVO-Konfiguration', tip: isEn ? 'Configure Sentry with `beforeSend` hook to scrub PII before uploading. Use Sentry\'s EU data region (sentry.io/eu) to keep errors in Europe. Set `tracesSampleRate: 0.1` for 10% performance monitoring. Source maps: upload during CI build with `SENTRY_AUTH_TOKEN`.' : 'Sentry mit `beforeSend` Hook konfigurieren, um PII vor dem Hochladen zu bereinigen. Sentries EU-Datenregion (sentry.io/eu) verwenden, um Fehler in Europa zu halten.' })}
         </div>
       </div>
+
+      {/* Cost Breakdown */}
+      <div id="sec-cost" className="section" style={{ background: 'var(--bg)' }}>
+        <div className="section-header">
+          <div className="section-title">{isEn ? 'Monthly Stack Cost Breakdown' : 'Monatliche Stack-Kosten'}</div>
+          <div className="section-subtitle">{isEn ? '~€0–5/mo base · transaction fees excluded' : '~€0–5/Monat Basis · Transaktionsgebühren nicht enthalten'}</div>
+        </div>
+        <div className="two-col-grid">
+
+          {/* Left — recommended stack table */}
+          <div>
+            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: 'var(--text-dim)', letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 12 }}>
+              {isEn ? 'Recommended Stack (OSS + free tiers)' : 'Empfohlener Stack (OSS + kostenlose Stufen)'}
+            </div>
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>{isEn ? 'Tool' : 'Werkzeug'}</th>
+                  <th>{isEn ? 'Tier' : 'Stufe'}</th>
+                  <th>{isEn ? 'Cost/mo' : 'Kosten/Mon'}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { tool: 'React 19 + Vite 6 + TypeScript', role: isEn ? 'Core framework' : 'Kern-Framework', v: '€0', color: 'var(--infra)' },
+                  { tool: 'Tailwind v4 + shadcn/ui + Fonts', role: isEn ? 'Styling layer (OSS)' : 'Styling-Schicht (OSS)', v: '€0', color: 'var(--event)' },
+                  { tool: 'Supabase Auth', role: isEn ? 'Auth — free tier (50k MAU)' : 'Auth — kostenlos (50k MAU)', v: '€0', color: 'var(--gdpr)' },
+                  { tool: 'Resend', role: isEn ? 'Email — 100 emails/day free' : 'E-Mail — 100/Tag kostenlos', v: '€0', color: 'var(--bronze)' },
+                  { tool: 'TanStack + Zustand + RHF + Zod', role: isEn ? 'State & forms (OSS)' : 'Zustand & Formulare (OSS)', v: '€0', color: 'var(--gold)' },
+                  { tool: 'Vitest + Playwright + ESLint', role: isEn ? 'Testing & CI (OSS)' : 'Tests & CI (OSS)', v: '€0', color: 'var(--alert)' },
+                  { tool: isEn ? 'PostHog (self-hosted on AX52 #3)' : 'PostHog (AX52 #3, keine Grenzkosten)', role: isEn ? 'Analytics — no extra cost' : 'Analytik — keine Zusatzkosten', v: '€0', color: 'var(--quality)' },
+                  { tool: 'Cloudflare Pages', role: isEn ? 'Hosting — unlimited requests free' : 'Hosting — unbegrenzt kostenlos', v: '€0', color: 'var(--green)' },
+                  { tool: isEn ? 'Cal.com (self-hosted)' : 'Cal.com (selbst-gehostet)', role: isEn ? 'Scheduling — small Hetzner VM' : 'Terminplanung — kleine VM', v: '~€5', color: 'var(--gold)' },
+                  { tool: 'Stripe', role: isEn ? 'Billing — 1.4% + €0.25/txn EU' : 'Abrechnung — 1,4% + €0,25/Txn EU', v: isEn ? '€0 base' : '€0 Basis', color: 'var(--bronze)' },
+                  { tool: 'GitHub Actions CI', role: isEn ? '2,000 min/mo free (public)' : '2.000 Min/Mon kostenlos (öffentlich)', v: '€0', color: 'var(--quality)' },
+                ].map((row, i) => (
+                  <tr key={i}>
+                    <td style={{ color: row.color, fontWeight: 600 }}>{row.tool}</td>
+                    <td className="td-muted" style={{ fontSize: 12 }}>{row.role}</td>
+                    <td style={{ color: row.v === '€0' ? 'var(--green)' : 'var(--gold)', textAlign: 'right' }}>{row.v}</td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colSpan={2} style={{ color: 'var(--text)', fontWeight: 700 }}>{isEn ? 'Total Base Cost' : 'Gesamte Basiskosten'}</td>
+                  <td className="grad-green" style={{ fontSize: 15 }}>~€0–5</td>
+                </tr>
+              </tfoot>
+            </table>
+            <div className="table-note">
+              {isEn
+                ? 'Stripe/Lemon Squeezy transaction fees apply per sale — not a fixed monthly cost.\nPostHog runs on the existing AX52 #3 (counted in data architecture cost).'
+                : 'Stripe/Lemon Squeezy Transaktionsgebühren gelten pro Verkauf — keine fixen Monatskosten.\nPostHog läuft auf dem bestehenden AX52 #3 (in den Datenarchitekturkosten enthalten).'}
+            </div>
+          </div>
+
+          {/* Right — optional upgrades + SaaS comparison */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+            <div>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: 'var(--text-dim)', letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 12 }}>
+                {isEn ? 'Optional Upgrades' : 'Optionale Upgrades'}
+              </div>
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>{isEn ? 'Upgrade' : 'Upgrade'}</th>
+                    <th>{isEn ? 'When' : 'Wann'}</th>
+                    <th>{isEn ? 'Adds/mo' : '+/Mon'}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { u: isEn ? 'Resend 50k emails/mo' : 'Resend 50k E-Mails/Mon', when: isEn ? 'Transactional volume grows' : 'E-Mail-Volumen wächst', v: '+€20', color: 'var(--bronze)' },
+                    { u: isEn ? 'Postmark 10k emails/mo' : 'Postmark 10k E-Mails/Mon', when: isEn ? 'Need max deliverability' : 'Max. Zustellbarkeit nötig', v: '+€15', color: 'var(--quality)' },
+                    { u: isEn ? 'Brevo email + SMS bundle' : 'Brevo E-Mail + SMS Paket', when: isEn ? 'Need SMS on one bill' : 'SMS auf einer Rechnung', v: '+€25+', color: 'var(--gdpr)' },
+                    { u: isEn ? 'Clerk (managed auth)' : 'Clerk (verwaltete Auth)', when: isEn ? 'No Supabase, need fast setup' : 'Kein Supabase, schnelles Setup', v: '+€25+', color: 'var(--gdpr)' },
+                    { u: isEn ? 'Plausible cloud (page analytics)' : 'Plausible Cloud (Seitenanalytik)', when: isEn ? 'Lightweight GDPR page stats' : 'Leichte DSGVO-Seitenstatistiken', v: '+€9–19', color: 'var(--quality)' },
+                    { u: isEn ? 'Sentry cloud EU (error tracking)' : 'Sentry Cloud EU (Fehler-Tracking)', when: isEn ? 'Don\'t want to self-host Sentry' : 'Kein Sentry-Selbst-Hosting', v: '+€26+', color: 'var(--alert)' },
+                    { u: isEn ? 'Metabase Pro (tenant BI)' : 'Metabase Pro (Mandanten-BI)', when: isEn ? 'Need embeddable dashboards' : 'Einbettbare Dashboards nötig', v: '+€500+', color: 'var(--gold)' },
+                  ].map((row, i) => (
+                    <tr key={i}>
+                      <td style={{ color: row.color, fontWeight: 600 }}>{row.u}</td>
+                      <td className="td-muted" style={{ fontSize: 11 }}>{row.when}</td>
+                      <td style={{ color: 'var(--gold)', textAlign: 'right' }}>{row.v}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            {n({
+              variant: 'infra',
+              title: isEn ? 'Managed SaaS Alternative: €300–1,500/mo' : 'Verwaltete SaaS-Alternative: €300–1.500/Monat',
+              desc: isEn
+                ? 'Auth0 (~€70) + SendGrid (~€30) + Mixpanel (~€100) + Vercel Pro (~€40) + Amplitude (~€300+) + Intercom (~€100) adds up fast — for the same stack you\'re getting at ~€5/mo base.'
+                : 'Auth0 (~€70) + SendGrid (~€30) + Mixpanel (~€100) + Vercel Pro (~€40) + Amplitude (~€300+) + Intercom (~€100) summiert sich schnell — für denselben Stack den Sie für ~€5/Monat bekommen.',
+              tag: isEn ? 'UP TO 300× SAVINGS' : 'BIS ZU 300× EINSPARUNGEN',
+              tagVariant: 'app',
+              style: { borderLeftColor: 'var(--green)' },
+              tipTitle: isEn ? 'Why is the stack so cheap?' : 'Warum ist der Stack so günstig?',
+              tip: isEn
+                ? 'Every layer uses OSS or generous free tiers: React, Vite, Tailwind, shadcn, TanStack, Zustand, Zod, Vitest, Playwright, ESLint — all €0. Cloudflare Pages free tier handles 500 builds/mo and unlimited requests. Supabase free tier covers 50k MAU. PostHog runs on your existing AX52 #3. The only fixed expense is Cal.com\'s ~€5 VM.'
+                : 'Jede Schicht verwendet OSS oder großzügige kostenlose Stufen: React, Vite, Tailwind, shadcn, TanStack, Zustand, Zod, Vitest, Playwright, ESLint — alle €0. Cloudflare Pages verarbeitet 500 Builds/Monat und unbegrenzte Anfragen. Supabase deckt 50k MAU kostenlos ab.',
+            })}
+          </div>
+        </div>
+      </div>
+
+        </div>{/* arch-content */}
+      </div>{/* arch-body */}
 
       {/* Footer */}
       <div className="page-footer">

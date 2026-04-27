@@ -2,212 +2,143 @@ import { type Page } from '../App'
 
 interface Props { onNavigate: (page: Page) => void }
 
-const mono: React.CSSProperties = { fontFamily: "'JetBrains Mono', monospace" }
-
 export default function Dashboard({ onNavigate }: Props) {
   return (
-    <div className="dashboard">
-      <div className="dash-bg" />
+    <div className="home">
 
-      <header className="dash-header">
-        <div className="dash-wordmark">
-          <div className="dash-wordmark-dot pulse" />
-          LU Equity · Platform Docs
+      {/* ── HERO: 2-column ── */}
+      <section className="home-hero">
+        <div className="home-hero-text">
+          <span className="home-eyebrow">
+            <span className="home-eyebrow-dot" />
+            LU Equity · Platform Docs · 2026
+          </span>
+          <h1 className="home-title">
+            SaaS Platform<br />
+            <span className="grad">Architecture</span>
+          </h1>
+          <p className="home-sub">
+            Interactive reference for the data pipeline and frontend tech stack.
+            EN / DE toggle, hover tooltips, cost analysis.
+          </p>
+          <div className="home-actions">
+            <button className="home-btn-primary" onClick={() => onNavigate('data-architecture')}>
+              Data Architecture <span>→</span>
+            </button>
+            <button className="home-btn-secondary" onClick={() => onNavigate('frontend-planning')}>
+              Frontend Planning <span>→</span>
+            </button>
+          </div>
         </div>
-        <div className="dash-status-pill">
-          <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--green)', boxShadow: '0 0 6px var(--green)' }} />
-          Live · 2026
-        </div>
-      </header>
 
-      <section className="dash-hero">
-        <div className="hero-eyebrow fade-up fade-up-1">
-          <span style={{ color: 'var(--green)' }}>●</span>
-          Architecture Reference
+        <div className="home-stats-grid">
+          {[
+            { n: '6',    l: 'Pipeline Layers',  c: 'var(--infra)' },
+            { n: '20+',  l: 'Data Nodes',        c: 'var(--event)' },
+            { n: '€510', l: 'Max Infra / mo',    c: 'var(--green)' },
+            { n: '8',    l: 'Frontend Layers',   c: 'var(--gdpr)' },
+            { n: '18+',  l: 'Vetted Tools',      c: 'var(--bronze)' },
+            { n: '~€5',  l: 'Frontend Base / mo', c: 'var(--gold)' },
+          ].map((s, i) => (
+            <div key={i} className="home-stat-card">
+              <span className="home-stat-n" style={{ color: s.c }}>{s.n}</span>
+              <span className="home-stat-l">{s.l}</span>
+            </div>
+          ))}
         </div>
-        <h1 className="hero-title fade-up fade-up-2">
-          SaaS Platform<br />
-          <span className="grad">Architecture Docs</span>
-        </h1>
-        <p className="hero-sub fade-up fade-up-3">
-          Interactive diagrams for the data platform and frontend stack.<br />
-          EN / DE toggle · hover tooltips · cost analysis.
-        </p>
       </section>
 
-      <div className="dash-cards fade-up fade-up-3">
+      {/* ── DIVIDER ── */}
+      <div className="home-section-label">Documentation</div>
 
-        {/* ── DATA ARCHITECTURE ── */}
-        <div
-          className="tile tile-data"
-          onClick={() => onNavigate('data-architecture')}
-          role="button" tabIndex={0}
-          onKeyDown={e => e.key === 'Enter' && onNavigate('data-architecture')}
-        >
-          <div className="tile-accent" />
-          <div className="tile-inner">
+      {/* ── DOC CARDS ── */}
+      <section className="home-docs">
 
-            {/* Chips */}
-            <div style={{ display: 'flex', gap: 6, marginBottom: 20 }}>
+        {/* Data Architecture */}
+        <article className="doc-card" onClick={() => onNavigate('data-architecture')} role="button" tabIndex={0} onKeyDown={e => e.key === 'Enter' && onNavigate('data-architecture')}>
+          <div className="doc-card-accent doc-accent-data" />
+          <div className="doc-card-inner">
+            <div className="doc-chips">
               <span className="tile-chip chip-cyan">Medallion</span>
               <span className="tile-chip chip-pink">GDPR</span>
               <span className="tile-chip chip-dim">EN · DE</span>
             </div>
-
-            {/* Vertical layer list — no overflow */}
-            <div style={{
-              borderRadius: 10, border: '1px solid var(--border)',
-              background: 'rgba(0,0,0,0.3)', overflow: 'hidden', marginBottom: 22
-            }}>
+            <h2 className="doc-title">Data Architecture</h2>
+            <p className="doc-desc">
+              Medallion pipeline on Hetzner bare-metal. Bronze → Silver → Gold with real-time Redpanda streaming, hourly Dagster batch, and full GDPR deletion pipeline.
+            </p>
+            <div className="doc-layers">
               {[
-                { label: 'Sources',      detail: 'Simplisan ERP · Crawler · App events',          color: '#6b7fa0' },
-                { label: 'Ingestion',    detail: 'Redpanda · Schema Registry · Dead Letter',       color: '#8b5cf6' },
-                { label: 'Bronze',       detail: 'MinIO · Iceberg tables · PII tagging',           color: '#d97706' },
-                { label: 'Silver',       detail: 'dbt models · pseudonymization · contracts',      color: '#94a3b8' },
-                { label: 'Gold',         detail: 'Postgres (Ubicloud) · schema-per-tenant',        color: '#eab308' },
-                { label: 'Applications', detail: 'Patient portal · BI apps · PostHog analytics',  color: '#10b981' },
-              ].map((layer, i, arr) => (
-                <div key={i} style={{
-                  display: 'flex', alignItems: 'center', gap: 12,
-                  padding: '10px 14px',
-                  borderBottom: i < arr.length - 1 ? '1px solid var(--border)' : 'none',
-                  background: i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.012)',
-                }}>
-                  <div style={{
-                    width: 3, height: 30, borderRadius: 2, flexShrink: 0,
-                    background: layer.color, boxShadow: `0 0 8px ${layer.color}55`,
-                  }} />
-                  <div>
-                    <div style={{ ...mono, fontSize: 9, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', color: layer.color, marginBottom: 2 }}>
-                      {layer.label}
-                    </div>
-                    <div style={{ fontSize: 11.5, color: 'var(--text-dim)', lineHeight: 1.4 }}>{layer.detail}</div>
-                  </div>
+                { label: 'Sources',      color: '#94a3b8' },
+                { label: 'Ingestion',    color: '#7c3aed' },
+                { label: 'Bronze (Raw)', color: '#b45309' },
+                { label: 'Silver (Clean)', color: '#64748b' },
+                { label: 'Gold (Business)', color: '#d97706' },
+                { label: 'Applications', color: '#059669' },
+              ].map((l, i) => (
+                <div key={i} className="doc-layer-row">
+                  <span className="doc-layer-pip" style={{ background: l.color }} />
+                  <span className="doc-layer-name">{l.label}</span>
                 </div>
               ))}
             </div>
-
-            <div className="tile-heading">Data Architecture</div>
-            <div className="tile-desc">
-              Medallion pipeline on Hetzner bare-metal. Bronze → Silver → Gold with real-time Redpanda streaming, hourly Dagster batch, and full GDPR deletion pipeline.
-            </div>
-
-            <ul className="tile-feature-list">
-              <li><div className="feat-dot" style={{ background: 'var(--infra)' }} />Hetzner AX52 ×3 in Germany · €440–510/mo vs €2–4k AWS</li>
-              <li><div className="feat-dot" style={{ background: 'var(--event)' }} />Redpanda + Schema Registry · Dead Letter Topic · auto-alerts</li>
-              <li><div className="feat-dot" style={{ background: 'var(--quality)' }} />dbt + Soda quality gates at every layer boundary</li>
-              <li><div className="feat-dot" style={{ background: 'var(--gdpr)' }} />GDPR deletion pipeline · PII tagging from Bronze onwards</li>
-            </ul>
-
-            <div className="tile-bottom">
-              <div className="tile-stats">
-                <div className="stat-item">
-                  <span className="stat-num" style={{ color: 'var(--infra)' }}>6</span>
-                  <span className="stat-label">Layers</span>
-                </div>
-                <div className="stat-item">
-                  <span className="stat-num">20+</span>
-                  <span className="stat-label">Nodes</span>
-                </div>
-                <div className="stat-item">
-                  <span className="stat-num" style={{ color: 'var(--green)' }}>€510</span>
-                  <span className="stat-label">Max/mo</span>
-                </div>
+            <div className="doc-card-footer">
+              <div className="doc-meta">
+                <span><strong>6</strong> layers</span>
+                <span><strong>20+</strong> nodes</span>
+                <span style={{ color: 'var(--green)' }}><strong>€510</strong> max / mo</span>
               </div>
-              <button className="tile-cta cta-data">Open →</button>
+              <button className="doc-cta doc-cta-data">Open →</button>
             </div>
           </div>
-        </div>
+        </article>
 
-        {/* ── FRONTEND PLANNING ── */}
-        <div
-          className="tile tile-fe"
-          onClick={() => onNavigate('frontend-planning')}
-          role="button" tabIndex={0}
-          onKeyDown={e => e.key === 'Enter' && onNavigate('frontend-planning')}
-        >
-          <div className="tile-accent" />
-          <div className="tile-inner">
-
-            {/* Chips */}
-            <div style={{ display: 'flex', gap: 6, marginBottom: 20 }}>
+        {/* Frontend Planning */}
+        <article className="doc-card" onClick={() => onNavigate('frontend-planning')} role="button" tabIndex={0} onKeyDown={e => e.key === 'Enter' && onNavigate('frontend-planning')}>
+          <div className="doc-card-accent doc-accent-fe" />
+          <div className="doc-card-inner">
+            <div className="doc-chips">
               <span className="tile-chip chip-green">SaaS Stack</span>
               <span className="tile-chip chip-purple">Alternatives</span>
-              <span className="tile-chip chip-cyan">Email/SMS</span>
               <span className="tile-chip chip-dim">EN · DE</span>
             </div>
-
-            {/* Vertical layer list — mirrors the Data Architecture tile */}
-            <div style={{
-              borderRadius: 10, border: '1px solid var(--border)',
-              background: 'rgba(0,0,0,0.3)', overflow: 'hidden', marginBottom: 22
-            }}>
+            <h2 className="doc-title">Frontend Planning</h2>
+            <p className="doc-desc">
+              Full frontend tech stack with vetted alternatives. Auth options, email/SMS comms, BI tools, module boundaries, and CI/CD pipeline.
+            </p>
+            <div className="doc-layers">
               {[
-                { label: 'Styling',    detail: 'Tailwind v4 · shadcn/ui · JetBrains Mono',          color: '#8b5cf6' },
-                { label: 'Auth',       detail: 'Supabase Auth · Keycloak (SSO) · Clerk · Better Auth', color: '#ec4899' },
-                { label: 'Email/SMS',  detail: 'Resend · Postmark · Brevo (EU) · Twilio',            color: '#d97706' },
-                { label: 'State',      detail: 'TanStack Query v5 · Zustand · RHF + Zod v4',         color: '#eab308' },
-                { label: 'Analytics',  detail: 'PostHog (self-host) · Metabase Pro · Plausible',     color: '#10b981' },
-                { label: 'Hosting',    detail: 'Cloudflare Pages · Stripe · Cal.com self-hosted',    color: '#22c55e' },
-              ].map((layer, i, arr) => (
-                <div key={i} style={{
-                  display: 'flex', alignItems: 'center', gap: 12,
-                  padding: '10px 14px',
-                  borderBottom: i < arr.length - 1 ? '1px solid var(--border)' : 'none',
-                  background: i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.012)',
-                }}>
-                  <div style={{
-                    width: 3, height: 30, borderRadius: 2, flexShrink: 0,
-                    background: layer.color, boxShadow: `0 0 8px ${layer.color}55`,
-                  }} />
-                  <div>
-                    <div style={{ ...mono, fontSize: 9, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', color: layer.color, marginBottom: 2 }}>
-                      {layer.label}
-                    </div>
-                    <div style={{ fontSize: 11.5, color: 'var(--text-dim)', lineHeight: 1.4 }}>{layer.detail}</div>
-                  </div>
+                { label: 'Styling',    color: '#7c3aed' },
+                { label: 'Auth',       color: '#db2777' },
+                { label: 'Email / SMS', color: '#b45309' },
+                { label: 'State & Forms', color: '#d97706' },
+                { label: 'Analytics & BI', color: '#059669' },
+                { label: 'Hosting & Services', color: '#0284c7' },
+              ].map((l, i) => (
+                <div key={i} className="doc-layer-row">
+                  <span className="doc-layer-pip" style={{ background: l.color }} />
+                  <span className="doc-layer-name">{l.label}</span>
                 </div>
               ))}
             </div>
-
-            <div className="tile-heading">Frontend Planning</div>
-            <div className="tile-desc">
-              Full frontend tech stack with vetted alternatives. Auth options, email/SMS comms, BI tools, module boundaries, and CI/CD pipeline.
-            </div>
-
-            <ul className="tile-feature-list">
-              <li><div className="feat-dot" style={{ background: 'var(--gdpr)' }} />Auth: Supabase Auth · Keycloak (SSO/SAML) · Clerk · Better Auth</li>
-              <li><div className="feat-dot" style={{ background: 'var(--bronze)' }} />Email: Resend (React templates) · Postmark · Brevo EU · Twilio SMS</li>
-              <li><div className="feat-dot" style={{ background: 'var(--gold)' }} />TanStack Query v5 + Zustand + RHF + Zod v4 state stack</li>
-              <li><div className="feat-dot" style={{ background: 'var(--alert)' }} />5-gate CI pipeline · TDD with failing stubs first</li>
-            </ul>
-
-            <div className="tile-bottom">
-              <div className="tile-stats">
-                <div className="stat-item">
-                  <span className="stat-num" style={{ color: 'var(--green)' }}>8</span>
-                  <span className="stat-label">Layers</span>
-                </div>
-                <div className="stat-item">
-                  <span className="stat-num">18+</span>
-                  <span className="stat-label">Tools</span>
-                </div>
-                <div className="stat-item">
-                  <span className="stat-num" style={{ color: 'var(--gold)' }}>4</span>
-                  <span className="stat-label">Alt options</span>
-                </div>
+            <div className="doc-card-footer">
+              <div className="doc-meta">
+                <span><strong>8</strong> layers</span>
+                <span><strong>18+</strong> tools</span>
+                <span style={{ color: 'var(--gold)' }}><strong>~€5</strong> base / mo</span>
               </div>
-              <button className="tile-cta cta-fe">Open →</button>
+              <button className="doc-cta doc-cta-fe">Open →</button>
             </div>
           </div>
-        </div>
+        </article>
 
-      </div>
+      </section>
 
-      <footer className="dash-footer">
-        <span>Designed & Architected by <strong style={{ color: 'var(--text-muted)' }}>Lokesh Upputri & Team</strong></span>
+      {/* ── FOOTER ── */}
+      <footer className="home-footer">
+        <span>Designed & Architected by <strong>Lokesh Upputri & Team</strong></span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--green)', boxShadow: '0 0 6px var(--green)' }} className="pulse" />
+          <div className="pulse" style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--green)', boxShadow: '0 0 4px var(--green)' }} />
           <span>LU EQUITY · 2026</span>
         </div>
       </footer>

@@ -148,7 +148,7 @@ const T: Record<'en' | 'de', Lang> = {
 
 type LangKey = 'en' | 'de'
 
-export default function DataArchitecture({ onBack }: { onBack: () => void }) {
+export default function DataArchitecture() {
   const [lang, setLang] = useState<LangKey>('en')
   const [tooltip, setTooltip] = useState<TooltipState>({ visible: false, x: 0, y: 0, title: '', content: '' })
   const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -194,7 +194,6 @@ export default function DataArchitecture({ onBack }: { onBack: () => void }) {
             <button className={lang === 'en' ? 'active' : ''} onClick={() => setLang('en')}>EN</button>
             <button className={lang === 'de' ? 'active' : ''} onClick={() => setLang('de')}>DE</button>
           </div>
-          <button className="back-btn" onClick={onBack}>← Dashboard</button>
         </div>
       </div>
 
@@ -221,11 +220,29 @@ export default function DataArchitecture({ onBack }: { onBack: () => void }) {
         <div className="legend-item" style={{ color: 'var(--text-dim)', fontSize: '10px' }}>{t.legendDashed}</div>
       </div>
 
+      {/* Body: sidebar + content */}
+      <div className="arch-body">
+        <nav className="arch-sidebar">
+          <span className="sidebar-section-label">Pipeline</span>
+          <button className="sidebar-link" onClick={() => document.getElementById('layer-sources')?.scrollIntoView({ behavior: 'smooth' })}>Sources</button>
+          <button className="sidebar-link" onClick={() => document.getElementById('layer-ingestion')?.scrollIntoView({ behavior: 'smooth' })}>Ingestion</button>
+          <button className="sidebar-link" onClick={() => document.getElementById('layer-bronze')?.scrollIntoView({ behavior: 'smooth' })}>Bronze (Raw)</button>
+          <button className="sidebar-link" onClick={() => document.getElementById('layer-silver')?.scrollIntoView({ behavior: 'smooth' })}>Silver (Clean)</button>
+          <button className="sidebar-link" onClick={() => document.getElementById('layer-gold')?.scrollIntoView({ behavior: 'smooth' })}>Gold (Business)</button>
+          <button className="sidebar-link" onClick={() => document.getElementById('layer-apps')?.scrollIntoView({ behavior: 'smooth' })}>Applications</button>
+          <span className="sidebar-section-label">Sections</span>
+          <button className="sidebar-link" onClick={() => document.getElementById('sec-infra')?.scrollIntoView({ behavior: 'smooth' })}>Infrastructure</button>
+          <button className="sidebar-link" onClick={() => document.getElementById('sec-flows')?.scrollIntoView({ behavior: 'smooth' })}>Data Flows</button>
+          <button className="sidebar-link" onClick={() => document.getElementById('sec-cost')?.scrollIntoView({ behavior: 'smooth' })}>Cost Breakdown</button>
+          <button className="sidebar-link" onClick={() => document.getElementById('sec-team')?.scrollIntoView({ behavior: 'smooth' })}>Team Cost</button>
+        </nav>
+        <div className="arch-content">
+
       {/* Canvas */}
       <div className="canvas">
         <div className="layers">
           {/* Sources */}
-          <div className="layer">
+          <div id="layer-sources" className="layer">
             <div className="layer-label label-source">{t.layerSources}</div>
             {n({ variant: 'source', title: isEn ? 'Simplisan ERP' : 'Simplisan ERP', desc: isEn ? 'Primary data source. Crawler extracts patient, business &amp; tenant data.' : 'Primäre Datenquelle. Der Crawler extrahiert Patienten-, Geschäfts- und Mandantendaten.', tag: isEn ? 'BATCH · HOURLY' : 'BATCH · STÜNDLICH', tagVariant: 'infra', tipTitle: isEn ? 'Why Simplisan ERP?' : 'Warum Simplisan ERP?', tip: isEn ? 'The operational system of record — all patient, business, and tenant data originates here. The Crawler extracts on an hourly batch schedule, feeding the entire Bronze layer.' : 'Das operative System der Aufzeichnung — alle Patienten-, Geschäfts- und Mandantendaten stammen von hier. Der Crawler extrahiert stündlich und speist die gesamte Bronze-Schicht.' })}
             {n({ variant: 'source', title: isEn ? 'Simplisan API' : 'Simplisan API', desc: isEn ? 'Future: REST API integration replacing Crawler for direct data fetch.' : 'Zukünftig: REST-API-Integration ersetzt den Crawler für direkten Datenabruf.', tag: isEn ? 'PLANNED' : 'GEPLANT', tagVariant: 'dim', dashed: true, tipTitle: isEn ? 'Why migrate to API later?' : 'Warum später zur API migrieren?', tip: isEn ? 'The Crawler is brittle — it depends on HTML/UI structure that can break silently. A REST API gives stable, versioned contracts. Planned once Simplisan exposes native API endpoints.' : 'Der Crawler ist fragil — er hängt von HTML/UI-Strukturen ab, die ohne Warnung brechen können. Eine REST-API bietet stabile, versionierte Verträge. Geplant, sobald Simplisan native API-Endpunkte bereitstellt.' })}
@@ -236,7 +253,7 @@ export default function DataArchitecture({ onBack }: { onBack: () => void }) {
           <div className="section-divider" data-label={t.divIngest} />
 
           {/* Ingestion */}
-          <div className="layer">
+          <div id="layer-ingestion" className="layer">
             <div className="layer-label label-event">{t.layerIngestion}</div>
             {n({ variant: 'infra', title: isEn ? 'Hetzner AX52 ×3' : 'Hetzner AX52 ×3', desc: isEn ? '#1: Dagster, dbt, Crawler. #2: Redpanda, MinIO. #3: PostHog (ClickHouse + Kafka). All in Germany, GDPR compliant.' : '#1: Dagster, dbt, Crawler. #2: Redpanda, MinIO. #3: PostHog (ClickHouse + Kafka). Alle in Deutschland, DSGVO-konform.', tag: isEn ? 'EU · GDPR · €225/mo' : 'EU · DSGVO · €225/Monat', tagVariant: 'infra', tipTitle: isEn ? 'Why Hetzner AX52?' : 'Warum Hetzner AX52?', tip: isEn ? 'Bare-metal servers in Germany at ~€75/mo each — 5–10x cheaper than AWS equivalents. All data stays in the EU, making GDPR compliance structural. No cold-start latency, no noisy-neighbour problem.' : 'Bare-Metal-Server in Deutschland für ~€75/Monat — 5–10x günstiger als AWS-Äquivalente. Alle Daten bleiben in der EU, was DSGVO-Konformität strukturell sicherstellt.' })}
             {n({ variant: 'event', title: 'Redpanda', desc: isEn ? 'Kafka-compatible event streaming. Handles patient events in real-time. Includes Schema Registry.' : 'Kafka-kompatibler Ereignis-Stream. Verarbeitet Patientenereignisse in Echtzeit. Enthält Schema Registry.', tag: isEn ? 'NEAR REAL-TIME' : 'NAHEZU ECHTZEIT', tagVariant: 'event', tipTitle: isEn ? 'Why Redpanda?' : 'Warum Redpanda?', tip: isEn ? 'Simpler than Kafka — single binary, no ZooKeeper, no JVM tuning. Built-in Schema Registry. 10x lower operational overhead for small teams. Kafka-compatible so any Kafka client works without code changes.' : 'Einfacher als Kafka — einzelne Binärdatei, kein ZooKeeper, kein JVM-Tuning. Integrierte Schema Registry. 10x geringerer Betriebsaufwand für kleine Teams. Kafka-kompatibel ohne Codeänderungen.' })}
@@ -248,7 +265,7 @@ export default function DataArchitecture({ onBack }: { onBack: () => void }) {
           <div className="section-divider" data-label={t.divStore} />
 
           {/* Bronze */}
-          <div className="layer">
+          <div id="layer-bronze" className="layer">
             <div className="layer-label label-bronze">{t.layerBronze}</div>
             {n({ variant: 'bronze', title: isEn ? 'MinIO (S3-compat)' : 'MinIO (S3-kompatibel)', desc: isEn ? 'Object storage on Hetzner. Stores raw data as Apache Iceberg tables (Parquet).' : 'Objektspeicher auf Hetzner. Speichert Rohdaten als Apache Iceberg-Tabellen (Parquet).', tag: isEn ? 'ICEBERG · SCHEMA-ON-READ' : 'ICEBERG · SCHEMA-BEI-LESEN', tagVariant: 'bronze', tipTitle: isEn ? 'Why MinIO + Iceberg?' : 'Warum MinIO + Iceberg?', tip: isEn ? 'MinIO gives S3-compatible object storage on-prem at €6/mo base instead of €200+ on AWS S3. Apache Iceberg adds native schema evolution and time-travel queries for audits — both critical for GDPR compliance.' : 'MinIO bietet S3-kompatiblen Speicher für ~€6/Monat statt €200+ auf AWS S3. Apache Iceberg fügt native Schema-Evolution und Zeitreise-Abfragen für Audits hinzu — beides kritisch für DSGVO-Konformität.' })}
             {n({ variant: 'bronze', title: 'bronz_data', desc: isEn ? 'All raw data lands here: Crawler batch + Redpanda events. Append-only, immutable. tenant_id column on every record.' : 'Alle Rohdaten landen hier: Crawler-Batch + Redpanda-Ereignisse. Nur-Anhänge, unveränderlich. tenant_id-Spalte in jedem Datensatz.', tag: isEn ? 'APPEND-ONLY' : 'NUR-ANHÄNGE', tagVariant: 'bronze', tipTitle: isEn ? 'Why a single bronz_data table?' : 'Warum eine einzelne bronz_data-Tabelle?', tip: isEn ? 'A single landing zone simplifies ingestion — both the batch Crawler and real-time Redpanda events land here. Append-only design ensures immutability and a full audit history. Every record carries a tenant_id column from day one.' : 'Eine einzelne Landezone vereinfacht die Aufnahme — sowohl der Batch-Crawler als auch Redpanda-Echtzeitereignisse landen hier. Nur-Anhänge-Design gewährleistet Unveränderlichkeit und vollständige Prüfhistorie.' })}
@@ -266,7 +283,7 @@ export default function DataArchitecture({ onBack }: { onBack: () => void }) {
           <div className="section-divider" data-label={t.divTransform} />
 
           {/* Silver */}
-          <div className="layer">
+          <div id="layer-silver" className="layer">
             <div className="layer-label label-silver">{t.layerSilver}</div>
             {n({ variant: 'silver', title: 'silver_app', desc: isEn ? 'Cleaned patient &amp; business data. Deduped, type-cast, normalized. dbt models with contracts enforced.' : 'Bereinigte Patienten- und Geschäftsdaten. Dedupliziert, typkonvertiert, normalisiert. dbt-Modelle mit erzwungenen Verträgen.', tag: 'DBT CONTRACTS', tagVariant: 'silver', tipTitle: isEn ? 'Why silver_app?' : 'Warum silver_app?', tip: isEn ? 'App-serving data needs normalized, deduplicated, type-cast records for real-time reads. dbt contracts enforce column-level guarantees — if Simplisan renames a column, the model fails loudly in CI rather than silently passing NULLs to patients.' : 'App-Daten benötigen normalisierte, deduplizierte Datensätze für Echtzeit-Lesezugriffe. dbt-Verträge erzwingen Garantien auf Spaltenebene — wenn Simplisan eine Spalte umbenennt, schlägt das Modell laut in CI fehl.' })}
             {n({ variant: 'silver', title: 'silver_bi', desc: isEn ? 'BI-oriented transforms. Aggregations, joins, pre-computed metrics for analytics.' : 'BI-orientierte Transformationen. Aggregationen, Joins, vorberechnete Metriken für Analysen.', tag: 'DBT CONTRACTS', tagVariant: 'silver', tipTitle: isEn ? 'Why separate silver_bi?' : 'Warum separates silver_bi?', tip: isEn ? 'BI queries need different data shapes than app queries — pre-computed aggregations, multi-table joins, time-series structures. Separating BI silver from app silver prevents analytics workloads from degrading application response times.' : 'BI-Abfragen benötigen andere Datenformen als App-Abfragen. Die Trennung verhindert, dass Analyse-Workloads die Antwortzeiten der Anwendung beeinträchtigen.' })}
@@ -284,7 +301,7 @@ export default function DataArchitecture({ onBack }: { onBack: () => void }) {
           <div className="section-divider" data-label={t.divServe} />
 
           {/* Gold */}
-          <div className="layer">
+          <div id="layer-gold" className="layer">
             <div className="layer-label label-gold">{t.layerGold}</div>
             {n({ variant: 'gold', title: isEn ? 'Postgres (Ubicloud Managed)' : 'Postgres (Ubicloud Verwaltet)', desc: isEn ? 'Ubicloud on Hetzner Germany. Gold tables served to applications. Schema-per-tenant isolation. Automated backups, PITR, encryption at rest.' : 'Ubicloud auf Hetzner Deutschland. Gold-Tabellen an Anwendungen ausgegeben. Schema-pro-Mandant-Isolation. Automatisierte Backups, PITR, Verschlüsselung im Ruhezustand.', tag: isEn ? 'TENANT ISOLATED · MANAGED' : 'MANDANT ISOLIERT · VERWALTET', tagVariant: 'gold', tipTitle: isEn ? 'Why Ubicloud Managed Postgres?' : 'Warum Ubicloud Managed Postgres?', tip: isEn ? 'Ubicloud provides Postgres-as-a-service on Hetzner Germany — GDPR-compliant, schema-per-tenant isolation, automated backups, PITR, encryption at rest. ~€80–150/mo vs €400+ on AWS RDS.' : 'Ubicloud bietet Postgres-as-a-Service auf Hetzner Deutschland — DSGVO-konform, Schema-pro-Mandant-Isolation, automatisierte Backups, PITR, Verschlüsselung. ~€80–150/Monat vs. €400+ auf AWS RDS.' })}
             <div className="node-group">
@@ -302,7 +319,7 @@ export default function DataArchitecture({ onBack }: { onBack: () => void }) {
           <div className="section-divider" data-label={t.divConsume} />
 
           {/* Applications */}
-          <div className="layer">
+          <div id="layer-apps" className="layer">
             <div className="layer-label label-app">{t.layerApps}</div>
             {n({ variant: 'app', title: 'patients_application', desc: isEn ? 'Shared app, subdomain per tenant (e.g., praxis-mueller.app.com). Filters by tenant_id internally. Emits events to Redpanda on address change / appointment booking.' : 'Gemeinsame App, Subdomain pro Mandant (z.B. praxis-mueller.app.com). Filtert intern nach tenant_id. Sendet Ereignisse an Redpanda bei Adressänderung / Terminbuchung.', tag: isEn ? 'SUBDOMAIN · MULTI-TENANT · EVENTS' : 'SUBDOMAIN · MULTI-MANDANT · EREIGNISSE', tagVariant: 'event', tipTitle: isEn ? 'Why subdomain multi-tenancy?' : 'Warum Subdomain-Multi-Mandant?', tip: isEn ? 'Each practice gets their own subdomain (praxis-mueller.app.com) for branding and isolation — but it\'s a single shared application filtering by tenant_id internally. No separate deployments needed per tenant.' : 'Jede Praxis erhält ihre eigene Subdomain für Branding und Isolation — aber es ist eine einzelne gemeinsame Anwendung, die intern nach tenant_id filtert. Keine separaten Deployments pro Mandant erforderlich.' })}
             {n({ variant: 'app', title: 'tennent_business_application', desc: isEn ? 'Tenant admin/business dashboard. Reads from gold_app_business.' : 'Mandanten-Admin/Geschäfts-Dashboard. Liest aus gold_app_business.', tag: isEn ? 'READ ONLY' : 'NUR LESEN', tagVariant: 'app', tipTitle: isEn ? 'Why a separate business app?' : 'Warum eine separate Geschäftsapp?', tip: isEn ? 'Practice managers need different data, features, and access controls than patients. The patient app is public-facing; the business app is for internal operations. Reads exclusively from gold_app_business.' : 'Praxismanager benötigen andere Daten und Zugriffskontrollen als Patienten. Die Patientenapp ist öffentlich; die Geschäftsapp ist für interne Abläufe.' })}
@@ -314,7 +331,7 @@ export default function DataArchitecture({ onBack }: { onBack: () => void }) {
       </div>
 
       {/* Cross-Cutting Infrastructure */}
-      <div className="section">
+      <div id="sec-infra" className="section">
         <div className="section-header">
           <div className="section-title">{t.secInfra}</div>
         </div>
@@ -329,7 +346,7 @@ export default function DataArchitecture({ onBack }: { onBack: () => void }) {
       </div>
 
       {/* Data Flow Paths */}
-      <div className="section" style={{ background: 'var(--bg)' }}>
+      <div id="sec-flows" className="section" style={{ background: 'var(--bg)' }}>
         <div className="section-header">
           <div className="section-title">{t.secFlow}</div>
         </div>
@@ -342,7 +359,7 @@ export default function DataArchitecture({ onBack }: { onBack: () => void }) {
       </div>
 
       {/* Cost Breakdown */}
-      <div className="section">
+      <div id="sec-cost" className="section">
         <div className="section-header">
           <div className="section-title">{t.secCost}</div>
           <div className="section-subtitle">{t.secCostSub}</div>
@@ -391,7 +408,7 @@ export default function DataArchitecture({ onBack }: { onBack: () => void }) {
       </div>
 
       {/* Team Cost */}
-      <div className="section" style={{ background: 'var(--bg)' }}>
+      <div id="sec-team" className="section" style={{ background: 'var(--bg)' }}>
         <div className="section-header">
           <div className="section-title">{t.secTeam}</div>
         </div>
@@ -438,6 +455,9 @@ export default function DataArchitecture({ onBack }: { onBack: () => void }) {
           </div>
         </div>
       </div>
+
+        </div>{/* arch-content */}
+      </div>{/* arch-body */}
 
       {/* Footer */}
       <div className="page-footer">
