@@ -112,19 +112,19 @@ export default function FrontendPlanning() {
       <div className="arch-body">
         <nav className="arch-sidebar">
           <span className="sidebar-section-label">Layers</span>
-          <a className="sidebar-link" href="#layer-core">App Core</a>
-          <a className="sidebar-link" href="#layer-styling">Styling</a>
-          <a className="sidebar-link" href="#layer-auth">Auth</a>
-          <a className="sidebar-link" href="#layer-email">Email & SMS</a>
-          <a className="sidebar-link" href="#layer-state">State & Forms</a>
-          <a className="sidebar-link" href="#layer-bi">Analytics & BI</a>
-          <a className="sidebar-link" href="#layer-hosting">Hosting</a>
-          <a className="sidebar-link" href="#layer-testing">Testing & CI</a>
+          <button className="sidebar-link" onClick={() => document.getElementById('layer-core')?.scrollIntoView({ behavior: 'smooth' })}>App Core</button>
+          <button className="sidebar-link" onClick={() => document.getElementById('layer-styling')?.scrollIntoView({ behavior: 'smooth' })}>Styling</button>
+          <button className="sidebar-link" onClick={() => document.getElementById('layer-auth')?.scrollIntoView({ behavior: 'smooth' })}>Auth</button>
+          <button className="sidebar-link" onClick={() => document.getElementById('layer-email')?.scrollIntoView({ behavior: 'smooth' })}>Email & SMS</button>
+          <button className="sidebar-link" onClick={() => document.getElementById('layer-state')?.scrollIntoView({ behavior: 'smooth' })}>State & Forms</button>
+          <button className="sidebar-link" onClick={() => document.getElementById('layer-bi')?.scrollIntoView({ behavior: 'smooth' })}>Analytics & BI</button>
+          <button className="sidebar-link" onClick={() => document.getElementById('layer-hosting')?.scrollIntoView({ behavior: 'smooth' })}>Hosting</button>
+          <button className="sidebar-link" onClick={() => document.getElementById('layer-testing')?.scrollIntoView({ behavior: 'smooth' })}>Testing & CI</button>
           <span className="sidebar-section-label">Sections</span>
-          <a className="sidebar-link" href="#sec-modules">Module Rules</a>
-          <a className="sidebar-link" href="#sec-compare">Comparisons</a>
-          <a className="sidebar-link" href="#sec-devtools">Dev Tooling</a>
-          <a className="sidebar-link" href="#sec-cost">Cost Breakdown</a>
+          <button className="sidebar-link" onClick={() => document.getElementById('sec-modules')?.scrollIntoView({ behavior: 'smooth' })}>Module Rules</button>
+          <button className="sidebar-link" onClick={() => document.getElementById('sec-compare')?.scrollIntoView({ behavior: 'smooth' })}>Comparisons</button>
+          <button className="sidebar-link" onClick={() => document.getElementById('sec-devtools')?.scrollIntoView({ behavior: 'smooth' })}>Dev Tooling</button>
+          <button className="sidebar-link" onClick={() => document.getElementById('sec-cost')?.scrollIntoView({ behavior: 'smooth' })}>Cost Breakdown</button>
         </nav>
         <div className="arch-content">
 
