@@ -11,7 +11,7 @@ export default function Dashboard({ onNavigate }: Props) {
         <div className="home-hero-text">
           <span className="home-eyebrow">
             <span className="home-eyebrow-dot" />
-            LU Equity · Platform Docs · 2026
+            LU Equity Holding UG · Platform Docs · 2026
           </span>
           <h1 className="home-title">
             SaaS Platform<br />
@@ -136,10 +136,10 @@ export default function Dashboard({ onNavigate }: Props) {
 
       {/* ── FOOTER ── */}
       <footer className="home-footer">
-        <span>Designed & Architected by <strong>Lokesh Upputri & Team</strong></span>
+        <span>Designed & Architected by <strong>Upputri Lokesh, Upputuri Tanuj & Paidala Rithika</strong></span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <div className="pulse" style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--green)', boxShadow: '0 0 4px var(--green)' }} />
-          <span>LU EQUITY · 2026</span>
+          <span>LU Equity Holding UG · 2026</span>
         </div>
       </footer>
     </div>

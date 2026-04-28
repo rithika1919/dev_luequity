@@ -478,11 +478,11 @@ export default function FrontendPlanning() {
             <span style={{ fontSize: 13, color: 'var(--text-muted)', fontWeight: 500 }}>{isEn ? 'Designed & Architected with' : 'Entworfen & Architekturiert mit'}</span>
             <span style={{ fontSize: 14, color: 'var(--alert)', margin: '0 5px' }}>♥</span>
             <span style={{ fontSize: 13, color: 'var(--text-muted)', fontWeight: 500 }}>{isEn ? 'by' : 'von'}</span>
-            <span style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600, marginLeft: 6, fontFamily: "'JetBrains Mono', monospace" }}>Lokesh Upputri & Team</span>
+            <span style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600, marginLeft: 6, fontFamily: "'JetBrains Mono', monospace" }}>Upputri Lokesh, Upputuri Tanuj & Paidala Rithika</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--green)' }} className="pulse" />
-            <span style={{ fontSize: 11, letterSpacing: 1, textTransform: 'uppercase' }}>LU Equity · 2026</span>
+            <span style={{ fontSize: 11, letterSpacing: 1, textTransform: 'uppercase' }}>LU Equity Holding UG · 2026</span>
           </div>
         </div>
       </div>

@@ -17,7 +17,7 @@ function GlobalNav({ page, onNavigate }: { page: Page; onNavigate: (p: Page) => 
     <nav className="global-nav">
       <button className="nav-logo" onClick={() => onNavigate('dashboard')}>
         <span className="nav-logo-dot" />
-        LU Equity
+        LU Equity Holding UG
       </button>
       <div className="nav-links">
         <button

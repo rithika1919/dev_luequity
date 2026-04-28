@@ -94,7 +94,7 @@ const T: Record<'en' | 'de', Lang> = {
     totalTeam: '3-person team total',
     footerBy: 'Designed & Architected with',
     footerBy2: 'by',
-    footerAuthor: 'Lokesh Upputri & Team',
+    footerAuthor: 'Upputri Lokesh, Upputuri Tanuj & Paidala Rithika',
   },
   de: {
     title: 'Datenplattform-Architektur',
@@ -142,7 +142,7 @@ const T: Record<'en' | 'de', Lang> = {
     totalTeam: '3-Personen-Team gesamt',
     footerBy: 'Entworfen & Architekturiert mit',
     footerBy2: 'von',
-    footerAuthor: 'Lokesh Upputri & Team',
+    footerAuthor: 'Upputri Lokesh, Upputuri Tanuj & Paidala Rithika',
   },
 }
 
@@ -470,7 +470,7 @@ export default function DataArchitecture() {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--green)' }} className="pulse" />
-            <span style={{ fontSize: 11, letterSpacing: 1, textTransform: 'uppercase' }}>LU Equity · 2026</span>
+            <span style={{ fontSize: 11, letterSpacing: 1, textTransform: 'uppercase' }}>LU Equity Holding UG · 2026</span>
           </div>
         </div>
       </div>
