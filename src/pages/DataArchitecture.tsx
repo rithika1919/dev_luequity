@@ -376,9 +376,9 @@ export default function DataArchitecture() {
               </thead>
               <tbody>
                 {[
-                  { c: isEn ? 'AX52 #1 — Compute' : 'AX52 #1 — Compute', s: isEn ? 'Dagster, dbt, Crawler' : 'Dagster, dbt, Crawler', v: '€75', color: 'var(--infra)' },
-                  { c: isEn ? 'AX52 #2 — Streaming + Storage' : 'AX52 #2 — Streaming + Speicher', s: 'Redpanda, MinIO', v: '€75', color: 'var(--infra)' },
-                  { c: isEn ? 'AX52 #3 — Analytics' : 'AX52 #3 — Analytik', s: isEn ? 'PostHog self-hosted (ClickHouse, Kafka, PG)' : 'PostHog selbst-gehostet (ClickHouse, Kafka, PG)', v: '€75', color: 'var(--infra)' },
+                  { c: 'AX41-NVMe #2994113 — Compute', s: isEn ? 'Dagster, dbt, Crawler' : 'Dagster, dbt, Crawler', v: '€75', color: 'var(--infra)' },
+                  { c: isEn ? 'AX41-NVMe #2994113 — Streaming + Storage' : 'AX41-NVMe #2994113 — Streaming + Speicher', s: 'Redpanda, MinIO', v: '€75', color: 'var(--infra)' },
+                  { c: isEn ? 'AX41-NVMe #2994113 — Analytics' : 'AX41-NVMe #2994113 — Analytik', s: isEn ? 'PostHog self-hosted (ClickHouse, Kafka, PG)' : 'PostHog selbst-gehostet (ClickHouse, Kafka, PG)', v: '€75', color: 'var(--infra)' },
                   { c: isEn ? 'Object Storage (3 TB)' : 'Objektspeicher (3 TB)', s: isEn ? 'Hetzner Object Storage (Bronze/Silver)' : 'Hetzner Objektspeicher (Bronze/Silber)', v: '€25', color: 'var(--bronze)' },
                   { c: isEn ? 'Managed Postgres' : 'Verwaltetes Postgres', s: isEn ? 'Ubicloud on Hetzner (Gold layer)' : 'Ubicloud auf Hetzner (Gold-Schicht)', v: '€80–150', color: 'var(--gold)' },
                   { c: isEn ? 'All Software' : 'Gesamte Software', s: 'Dagster, dbt, Redpanda, Iceberg, Grafana, Soda, PostHog', v: '€0', color: 'var(--green)' },
